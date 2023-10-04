@@ -266,3 +266,10 @@ final_mci_data =
 ```
 
 I used `anti_join` to see if there were some participants appear in only the baseline or amyloid datasets. `inner_join` was used to only keep participants who appear in both data sets since I noticed that not every participant was present in both data sets. The resulting dataset (`final_mci_data`) includes the following variables: study ID, age at baseline, sex (male or female), education, APOE4 carrier status, age at onset of MCI, visit number (0, 2, 4, 6, 8), and time (in years) elapsed since the study baseline to the visit where biomarker Amyloid (42/40 ratio) was measured.
+
+# Exporting final mci dataset
+
+```{r}
+write_csv(final_mci_data, file="final_mci_data.csv")
+```
+
