@@ -161,3 +161,18 @@ gwynnda_trash_wheel_data =
     homes_powered = (500*weight_tons)/30,
     dataset = "Gwynnda Trash Wheel")
 ```
+
+# Data merging of the Trash Wheel datasets
+
+```{r}
+final_trash_wheel_data = 
+  bind_rows(mr_trash_wheel_data, professor_trash_wheel_data, gwynnda_trash_wheel_data)
+
+filter(gwynnda_trash_wheel_data, month=="July", year=="2021") 
+```
+
+The total number of observations in the final data set called `final_trash_wheel_data` is `r length(final_trash_wheel_data$dumpster)`. Examples of key variables in `final_trash_wheel_data` are: dumpster number, month, year, date, weight in tons, homes powered, name of data set (Mr.Trash Wheel, Professor Trash Wheel, and Gwynnda Trash Wheel). I calculated `homes_powered` for each individual data set prior to merging each data set using `bind_rows`.
+
+The total weight of trash collected in the Professor Trash Wheel dataset is `r sum(professor_trash_wheel_data$weight_tons)` tons.
+
+In July 2021, the total number of cigarette butts collected by Gwynnda was `r sum(gwynnda_trash_wheel_data$cigarette_butts)` cigarette butts.
