@@ -148,3 +148,16 @@ professor_trash_wheel_data =
     homes_powered = (500*weight_tons)/30,
     dataset = "Professor Trash Wheel")
 ```
+
+# Data wrangling of Gwynnda dataset
+
+```{r}
+gwynnda_trash_wheel_data =
+  read_excel("./trashwheel_dataset/trash_wheel_collection_data.xlsx", 
+             4, n_max = 155) |>
+  janitor::clean_names() |>
+  select(-homes_powered) |>
+  mutate(
+    homes_powered = (500*weight_tons)/30,
+    dataset = "Gwynnda Trash Wheel")
+```
