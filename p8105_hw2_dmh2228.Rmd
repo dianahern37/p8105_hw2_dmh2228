@@ -176,3 +176,23 @@ The total number of observations in the final data set called `final_trash_wheel
 The total weight of trash collected in the Professor Trash Wheel dataset is `r sum(professor_trash_wheel_data$weight_tons)` tons.
 
 In July 2021, the total number of cigarette butts collected by Gwynnda was `r sum(gwynnda_trash_wheel_data$cigarette_butts)` cigarette butts.
+
+# Problem 3: using data_mci
+
+# Data wrangling of mci_amyloid dataset
+
+```{r}
+mci_amyloid_data = 
+  read_csv("./data_mci/mci_amyloid.csv", skip = 1) |>
+  janitor::clean_names() |>
+  pivot_longer(
+    baseline:time_8,
+    names_to = "visit",
+    names_prefix = "time_",
+    values_to = "time") |>
+  mutate(
+    visit = replace(visit, visit == "baseline", "0")
+  )
+```
+
+In the import process,  I skipped the first row to have cases start at row 1 using `skip`. I also used `janitor::cleannames()` to make the variable names tidy. I used `pivot_longer` to not have each visit spread across 5 columns. I also changed the visit named `baseline` to `0` in order to have a more uniform list of visit names using `replace`. I deleted "time_" in front of each visit as it was repetitive using `names_prefix `. `mci_amyloid_data` consists of study IDs, visits 0, 2, 4, 6, and 8, and time (in years) elapsed since the study baseline to the visit where biomarker Amyloid was measured.
