@@ -68,3 +68,33 @@ snp_data =
     ) |>
   select(-day)
 ```
+
+# Data wrangling of unemployment_data
+
+```{r}
+unemployment_data = 
+  read_csv("./fivethirtyeight_datasets/unemployment.csv") |> 
+  janitor::clean_names() |>
+  pivot_longer(
+    jan:dec,
+    names_to = "month",
+    values_to = "unemployment"
+  ) |> 
+  mutate(
+    month = case_match(
+      month,
+      "jan" ~ "January",
+      "feb" ~ "February",
+      "mar" ~ "March",
+      "apr" ~ "April",
+      "may" ~ "May",
+      "jun" ~ "June",
+      "jul" ~ "July",
+      "aug" ~ "August",
+      "sep" ~ "September",
+      "oct" ~ "October",
+      "nov" ~ "November",
+      "dec" ~ "December"),
+    year = as.character(year)
+    )
+```
