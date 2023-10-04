@@ -98,3 +98,17 @@ unemployment_data =
     year = as.character(year)
     )
 ```
+
+# Data merging of the FiveThirtyEight datasets
+
+```{r}
+five_thirty_eight_data =
+  inner_join(pols_month_data, snp_data)
+
+final_five_thirty_eight_data =
+  inner_join(five_thirty_eight_data, unemployment_data)
+```
+
+The pols_month dataset includes the following variables: year, month, gov_gop, sen_gop, rep_gop, gov_dem, sen_dem, rep dem, and president. The snp dataset includes the following variables: year, month, and close. The unemployment dataset includes the following variables: year, month, and unemployment rate.
+
+The final FiveThirtyEight dataset includes the following datasets: pols_month, snp, and unemployment. The final dataset has 786 rows and 11 columns. There are 11 key variables: year, month, gov_gop, sen_gop, rep_gop, gov_dem, sen_dem, rep_dem, president, close, and unemployment. The years range from 1950 to 2015. 
