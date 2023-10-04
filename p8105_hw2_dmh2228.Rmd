@@ -112,3 +112,26 @@ final_five_thirty_eight_data =
 The pols_month dataset includes the following variables: year, month, gov_gop, sen_gop, rep_gop, gov_dem, sen_dem, rep dem, and president. The snp dataset includes the following variables: year, month, and close. The unemployment dataset includes the following variables: year, month, and unemployment rate.
 
 The final FiveThirtyEight dataset includes the following datasets: pols_month, snp, and unemployment. The final dataset has 786 rows and 11 columns. There are 11 key variables: year, month, gov_gop, sen_gop, rep_gop, gov_dem, sen_dem, rep_dem, president, close, and unemployment. The years range from 1950 to 2015. 
+
+# Problem 2: using Mr. Trash Wheel dataset
+
+# Load readxl to import Excel dataset
+
+```{r}
+library(readxl)
+```
+
+# Data wrangling of Mr. Trash Wheel dataset
+
+```{r}
+mr_trash_wheel_data = 
+  read_excel("./trashwheel_dataset/trash_wheel_collection_data.xlsx", 
+             n_max = 584) |>
+  janitor::clean_names() |>
+  select(-homes_powered, -15, -16) |>
+  mutate(
+    homes_powered = (500*weight_tons)/30,
+    dataset = "Mr. Trash Wheel",
+    year = as.numeric(year)
+    )
+```
