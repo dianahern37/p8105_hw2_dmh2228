@@ -171,9 +171,11 @@ final_trash_wheel_data =
 filter(gwynnda_trash_wheel_data, month=="July", year=="2021") 
 ```
 
-The total number of observations in the final data set called `final_trash_wheel_data` is `r length(final_trash_wheel_data$dumpster)`. Examples of key variables in `final_trash_wheel_data` are: dumpster number, month, year, date, weight in tons, homes powered, name of data set (Mr.Trash Wheel, Professor Trash Wheel, and Gwynnda Trash Wheel). I calculated `homes_powered` for each individual data set prior to merging each data set using `bind_rows`.
+Mr. Trash Wheel (`mr_trash_wheel_data`) has `r length(mr_trash_wheel_data$dumpster)` observations. Professor Trash Wheel (`professor_trash_wheel_data`) has `r length(professor_trash_wheel_data$dumpster)` observations. Gwynnda Trash Wheel (`gwynnda_trash_wheel_data`) has `r length(gwynnda_trash_wheel_data$dumpster)` observations.
 
-The total weight of trash collected in the Professor Trash Wheel dataset is `r sum(professor_trash_wheel_data$weight_tons)` tons.
+The total number of observations in the final data set called `final_trash_wheel_data` is `r length(final_trash_wheel_data$dumpster)`. Examples of key variables in `final_trash_wheel_data` are: dumpster number, month, year, date, weight in tons of the litter, homes powered, different litter types (plastic bottles, glass bottles, etc.), and the name of the data set that the data is coming from (Mr.Trash Wheel, Professor Trash Wheel, and Gwynnda Trash Wheel). I calculated `homes_powered` for each individual data set prior to merging each data set using `bind_rows`.
+
+The total weight of trash collected in the Professor Trash Wheel data set is `r sum(professor_trash_wheel_data$weight_tons)` tons.
 
 In July 2021, the total number of cigarette butts collected by Gwynnda was `r sum(gwynnda_trash_wheel_data$cigarette_butts)` cigarette butts.
 
@@ -246,7 +248,7 @@ mci_in_study_data =
 filter(mci_baseline_data, sex=="Female", apoe4=="APOE4 carrier")
 ```
 
-In the import process, I skipped the first row to have cases start at row 1 using `skip`. I also used `janitor::cleannames()` to make the variable names tidy. I changed `current_age` to `age_at_baseline` to follow a similar pattern to `age_at_onset`. I changed `id` to `study_id` to match the `mci_amyloid_data` data set. The data sets `mci_baseline_data` and `mci_in_study` include the following variables: study ID, sex (male or female), education level, age at baseline of study, age at onset of MCI, and APOE4 carrier status. I created one data frame called `mci_baseline_data` with every eligible participant along with missing data. In the `mci_baseline_data`, I used `filter` to only keep eligible participants (participants whose age at onset was older than their age at baseline). I also kept missing data in `mci_baseline_data`. I created another data frame called `mci_in_study_data` with participants who developed MCI during the study using a `filter`. I made sex and APOE carrier status not numeric using `case_match`. Sex was labeled as female or male. APOE carrier status was labeled as APOE carrier or APOE non-carrier. 
+In the import process, I skipped the first row to have cases start at row 1 using `skip`. I also used `janitor::cleannames()` to make the variable names tidy. I changed `current_age` to `age_at_baseline` to follow a similar pattern to `age_at_onset`. I changed `id` to `study_id` to match the `mci_amyloid_data` data set. The data sets `mci_baseline_data` and `mci_in_study` include the following variables: study ID, sex (male or female), education level, age at baseline of study, age at onset of MCI, and APOE4 carrier status. I created one data frame called `mci_baseline_data` with every eligible participant along with missing data. In the `mci_baseline_data`, I used `filter` to only keep eligible participants (participants whose age at onset was older than their age at baseline). I created another data frame called `mci_in_study_data` with participants who developed MCI during the study using a `filter` that got rid of participants who developed MCI prior to the study and participants who did not develop MCI during the study. I made sex and APOE carrier status not numeric using `case_match`. Sex was labeled as female or male. APOE carrier status was labeled as APOE carrier or APOE non-carrier. 
 
 The study recruited `r length(mci_baseline_data$study_id)` eligible participants. Only `r length(mci_in_study_data$age_at_onset)` participants developed MCI during the study.
 
@@ -265,7 +267,7 @@ final_mci_data =
   inner_join(mci_baseline_data, mci_amyloid_data)
 ```
 
-I used `anti_join` to see if there were some participants appear in only the baseline or amyloid datasets. `inner_join` was used to only keep participants who appear in both data sets since I noticed that not every participant was present in both data sets. The resulting dataset (`final_mci_data`) includes the following variables: study ID, age at baseline, sex (male or female), education, APOE4 carrier status, age at onset of MCI, visit number (0, 2, 4, 6, 8), and time (in years) elapsed since the study baseline to the visit where biomarker Amyloid (42/40 ratio) was measured.
+I used `anti_join` to see if there were some participants appear in only the baseline or amyloid data sets. `inner_join` was used to only keep participants who appear in both data sets since I noticed that not every participant was present in both data sets. The resulting data set (`final_mci_data`) includes the following variables: study ID, age at baseline, sex (male or female), education, APOE4 carrier status, age at onset of MCI, visit number (0, 2, 4, 6, 8), and time (in years) elapsed since the study baseline to the visit where biomarker Amyloid (42/40 ratio) was measured.
 
 # Exporting final mci dataset
 
