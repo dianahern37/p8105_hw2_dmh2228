@@ -40,3 +40,31 @@ pols_month_data =
               )|>
   select(-prez_dem, -prez_gop, -day)
 ```
+
+# Data wrangling of snp_data
+
+```{r}
+snp_data = 
+  read_csv("./fivethirtyeight_datasets/snp.csv") |>
+  separate(col=date, into=c('month', 'day', 'year'), sep='/') |>
+  select('year', 'month', 'day', everything()) |>
+  mutate(
+    month = case_match(
+      month,
+      "1" ~ "January",
+      "2" ~ "February",
+      "3" ~ "March",
+      "4" ~ "April",
+      "5" ~ "May",
+      "6" ~ "June",
+      "7" ~ "July",
+      "8" ~ "August",
+      "9" ~ "September",
+      "10" ~ "October",
+      "11" ~ "November",
+      "12" ~ "December"),
+    year = if_else(year < 50, paste('20',year), paste('19',year)),
+    year = gsub(" ","",year) 
+    ) |>
+  select(-day)
+```
