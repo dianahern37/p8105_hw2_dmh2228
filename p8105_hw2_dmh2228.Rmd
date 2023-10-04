@@ -135,3 +135,16 @@ mr_trash_wheel_data =
     year = as.numeric(year)
     )
 ```
+
+# Data wrangling of Professor Trash Wheel dataset 
+
+```{r}
+professor_trash_wheel_data =
+  read_excel("./trashwheel_dataset/trash_wheel_collection_data.xlsx", 
+             2, n_max = 106) |>
+  janitor::clean_names() |>
+  select(-homes_powered) |>
+  mutate(
+    homes_powered = (500*weight_tons)/30,
+    dataset = "Professor Trash Wheel")
+```
