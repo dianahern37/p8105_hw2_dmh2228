@@ -196,3 +196,60 @@ mci_amyloid_data =
 ```
 
 In the import process,  I skipped the first row to have cases start at row 1 using `skip`. I also used `janitor::cleannames()` to make the variable names tidy. I used `pivot_longer` to not have each visit spread across 5 columns. I also changed the visit named `baseline` to `0` in order to have a more uniform list of visit names using `replace`. I deleted "time_" in front of each visit as it was repetitive using `names_prefix `. `mci_amyloid_data` consists of study IDs, visits 0, 2, 4, 6, and 8, and time (in years) elapsed since the study baseline to the visit where biomarker Amyloid was measured.
+
+# Data wrangling of mci_baseline dataset 
+
+```{r}
+mci_baseline_data = 
+  read_csv("./data_mci/MCI_baseline.csv", skip = 1, na = ".") |>
+  janitor::clean_names() |>
+  mutate(
+    sex =
+      case_match(
+        sex,
+        0 ~ "Female",
+        1 ~ "Male"),
+    sex = as.factor(sex),
+    apoe4 =
+      case_match(
+        apoe4,
+        0 ~ "APOE4 non-carrier",
+        1 ~ "APOE4 carrier"),
+    apoe4 = as.factor(apoe4)
+    ) |>
+  rename(age_at_baseline = current_age,
+         study_id = id) |>
+  filter(age_at_baseline < age_at_onset | is.na(age_at_onset))
+ 
+
+mci_in_study_data =
+    read_csv("./data_mci/MCI_baseline.csv", skip = 1) |>
+  janitor::clean_names() |>
+  mutate(
+    sex =
+      case_match(
+        sex,
+        0 ~ "Female",
+        1 ~ "Male"),
+    sex = as.factor(sex),
+    apoe4 =
+      case_match(
+        apoe4,
+        0 ~ "APOE4 non-carrier",
+        1 ~ "APOE4 carrier"),
+    apoe4 = as.factor(apoe4)
+    ) |>
+  rename(age_at_baseline = current_age,
+         study_id = id) |>
+  filter(age_at_baseline < age_at_onset) 
+
+filter(mci_baseline_data, sex=="Female", apoe4=="APOE4 carrier")
+```
+
+In the import process, I skipped the first row to have cases start at row 1 using `skip`. I also used `janitor::cleannames()` to make the variable names tidy. I changed `current_age` to `age_at_baseline` to follow a similar pattern to `age_at_onset`. I changed `id` to `study_id` to match the `mci_amyloid_data` data set. The data sets `mci_baseline_data` and `mci_in_study` include the following variables: study ID, sex (male or female), education level, age at baseline of study, age at onset of MCI, and APOE4 carrier status. I created one data frame called `mci_baseline_data` with every eligible participant along with missing data. In the `mci_baseline_data`, I used `filter` to only keep eligible participants (participants whose age at onset was older than their age at baseline). I also kept missing data in `mci_baseline_data`. I created another data frame called `mci_in_study_data` with participants who developed MCI during the study using a `filter`. I made sex and APOE carrier status not numeric using `case_match`. Sex was labeled as female or male. APOE carrier status was labeled as APOE carrier or APOE non-carrier. 
+
+The study recruited `r length(mci_baseline_data$study_id)` eligible participants. Only `r length(mci_in_study_data$age_at_onset)` participants developed MCI during the study.
+
+The mean age at baseline is `r mean(mci_baseline_data$age_at_baseline)` years old. 
+
+There are `r length(mci_in_study_data$study_id)` females that are APOE4 carriers in the study.
